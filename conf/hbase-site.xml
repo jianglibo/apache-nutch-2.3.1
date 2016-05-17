@@ -22,4 +22,25 @@
  */
 -->
 <configuration>
+  <property>
+  <name>hbase.rootdir</name>
+  <value>hdfs://nn.intranet.fh.gov.cn:8020/hbase</value>
+</property>
+<property>
+  <name>hbase.cluster.distributed</name>
+  <value>true</value>
+</property>
+
+  <property>
+  <name>hbase.zookeeper.quorum</name>
+  <value>nn.intranet.fh.gov.cn,dn1.intranet.fh.gov.cn,dn2.intranet.fh.gov.cn,dn3.intranet.fh.gov.cn,snn.intranet.fh.gov.cn</value>
+</property>
+<property>
+  <name>hbase.zookeeper.property.dataDir</name>
+  <value>/usr/local/zookeeper</value>
+</property>
+<property>
+  <name>hbase.regionserver.dns.nameserver</name>
+  <value>10.74.111.61</value>
+</property>
 </configuration>

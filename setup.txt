@@ -1,0 +1,7 @@
+ant runtime
+ant resolve-test -v > tt.txt
+
+HADOOP_HOME -> c:\hadoop-2.7.1
+or
+eclipse vmargs -Dhadoop.home.dir=C:\hadoop-2.7.1
+parameter: c:\urls

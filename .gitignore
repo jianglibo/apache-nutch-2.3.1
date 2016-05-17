@@ -66,3 +66,6 @@ $RECYCLE.BIN/
 **/build/
 *.classpath
 .project
+.vagrant/
+*.log.*
+*.log
