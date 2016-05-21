@@ -1,0 +1,1 @@
+cp /root/.m2/repository/org/apache/avro/avro/1.7.6/avro-1.7.6.jar /root/Downloads/hadoop-2.5.2/share/hadoop/common/lib/

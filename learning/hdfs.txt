@@ -1,0 +1,6 @@
+Unable to load native-hadoop library?
+
+export HADOOP_HOME=/root/Downloads/hadoop-2.5.2
+
+common commands:
+list
