@@ -24,11 +24,11 @@
     <name>storage.data.store.class</name>
     <value>org.apache.gora.hbase.store.HBaseStore</value>
   </property>
-  
+
   <property>
   <name>http.agent.name</name>
   <value>fhgov</value>
-  <description>HTTP 'User-Agent' request header. MUST NOT be empty - 
+  <description>HTTP 'User-Agent' request header. MUST NOT be empty -
   please set this to a single word uniquely related to your organization.
 
   NOTE: You should also check other related properties:
@@ -43,4 +43,17 @@
 
   </description>
 </property>
+<property>
+  <name>plugin.includes</name>
+ <value>protocol-http|urlfilter-regex|parse-html|index-(basic|anchor)|urlnormalizer-(pass|regex|basic)|scoring-opic</value>
+ <description>Regular expression naming plugin directory names to
+  include.  Any plugin not matching this expression is excluded.
+  In any case you need at least include the nutch-extensionpoints plugin. By
+  default Nutch includes crawling just HTML and plain text via HTTP,
+  and basic indexing and search plugins. In order to use HTTPS please enable
+  protocol-httpclient, but be aware of possible intermittent problems with the
+  underlying commons-httpclient library.
+  </description>
+</property>
+
 </configuration>
