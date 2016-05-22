@@ -455,7 +455,11 @@
  <target name="test-plugins" depends="compile" description="--> run plugin JUnit tests only">
   <ant dir="src/plugin" target="test" inheritAll="false" />
  </target>
-
+	
+	<target name="test-htmlparser" depends="compile" description="--> run plugin JUnit tests only">
+	  <ant dir="src/plugin/parse-html" target="test" inheritAll="false" />
+	 </target>
+	
  <target name="nightly" depends="test, tar-src, zip-src, javadoc" description="--> run the nightly target build">
  </target>
 
