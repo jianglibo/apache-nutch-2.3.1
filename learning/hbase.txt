@@ -1,3 +1,5 @@
 list
 
-scan 'table'
+scan "nbgov_webpage"
+
+get 'nbgov_webpage', "key\x03\x3f\xcd"
