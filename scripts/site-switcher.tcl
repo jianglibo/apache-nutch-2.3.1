@@ -34,8 +34,14 @@ proc ::SiteSwitcher::switchSite {rawParamDict actions} {
     exec mkdir -p $conf
   }
   exec rm -f {*}[glob -nocomplain -directory $conf -type f *]
-  exec cp -f {*}[glob -directory $confDefault -type f *] $conf
-  exec cp -f {*}[glob -directory $confSite -type f *] $conf
+  set filesToCopy [glob -nocomplain -directory $confDefault -type f *]
+  if {[llength $filesToCopy] > 0} {
+    exec cp -f {*}$filesToCopy $conf
+  }
+  set filesToCopy [glob -nocomplain -directory $confSite -type f *]
+  if {[llength $filesToCopy] > 0} {
+    exec cp -f {*}$filesToCopy $conf
+  }
 
   ::CommonUtil::whereami $siteId
   puts "switch to $siteId done."

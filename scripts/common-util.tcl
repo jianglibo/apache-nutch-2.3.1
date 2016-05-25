@@ -6,6 +6,9 @@ namespace eval CommonUtil {
 
 proc ::CommonUtil::whereami {{content {}}} {
   set fn [file join $::baseDir scripts whereami.txt]
+  if {! [file exists $fn]} {
+    exec touch $fn
+  }
   if {[string length $content] > 0} {
     writeContent $fn $content
   } else {
