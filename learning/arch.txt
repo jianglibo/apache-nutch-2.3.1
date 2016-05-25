@@ -1,0 +1,13 @@
+roles:
+* controller machine. must connect to hadoop cluster.
+* developer machine. can ssh reach controller machine.
+
+possible workflow:
+* run nutch  bash script on controller server.
+* use java to write code programly.
+
+hadoop jar xxx.jar CLASSNAME
+说明最终使用的还是hadoop shell命令。
+
+Job.submit() : Submit the job to the cluster and return immediately.
+Job.waitForCompletion(boolean) : Submit the job to the cluster and wait for it to finish.
