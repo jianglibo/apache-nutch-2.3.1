@@ -70,4 +70,5 @@ $RECYCLE.BIN/
 *.log.*
 *.log
 
-**/hbase-site.xml
+conf/
+**/whereami.txt
