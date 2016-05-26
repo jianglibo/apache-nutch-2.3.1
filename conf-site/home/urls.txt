@@ -1,1 +1,32 @@
-curl 'http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=91&endrecord=135&perpage=15'
+curl 'http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=0&endrecord=135&perpage=15'
+
+curl 'http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=0&endrecord=135&perpage=15' -H 'Host: gtoc.ningbo.gov.cn' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' -H 'X-Requested-With: XMLHttpRequest' -H 'Referer: http://gtoc.ningbo.gov.cn/col/col158/index.html?uid=4116&pageNum=6' -H 'Cookie: JSESSIONID=F01D07266EA7F96D7E52DB752FDD9608; _gscu_883630231=64179564na0juj99; _gscs_883630231=64179564muwcpt99|pv:5; _gscbrs_883630231=1' -H 'Connection: keep-alive' --data 'col=1&appid=1&webid=3&path=%2F&columnid=158&sourceContentType=1&unitid=4116&webname=%E4%B8%AD%E5%9B%BD%C2%B7%E5%AE%81%E6%B3%A2+%E5%85%AC%E6%B0%91%E7%AB%99&permissiontype=0'
+
+curl 'http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=0&endrecord=0&perpage=15' -H 'Host: gtoc.ningbo.gov.cn' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' -H 'X-Requested-With: XMLHttpRequest' -H 'Referer: http://gtoc.ningbo.gov.cn/col/col158/index.html?uid=4116&pageNum=6' -H 'Cookie: JSESSIONID=F01D07266EA7F96D7E52DB752FDD9608; _gscu_883630231=64179564na0juj99; _gscs_883630231=64179564muwcpt99|pv:5; _gscbrs_883630231=1' -H 'Connection: keep-alive' --data 'col=1&appid=1&webid=3&path=%2F&columnid=158&sourceContentType=1&unitid=4116&webname=%E4%B8%AD%E5%9B%BD%C2%B7%E5%AE%81%E6%B3%A2+%E5%85%AC%E6%B0%91%E7%AB%99&permissiontype=0'
+
+curl 'http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=1&endrecord=45&perpage=15' -H 'Host: gtoc.ningbo.gov.cn' -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0' -H 'Accept: application/xml, text/xml, */*; q=0.01' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' -H 'X-Requested-With: XMLHttpRequest' -H 'Referer: http://gtoc.ningbo.gov.cn/col/col167/index.html?uid=4278&pageNum=4' -H 'Cookie: JSESSIONID=751178A8DEECE33895BF6CFED0828BD2; _gscu_883630231=64179564na0juj99; _gscs_883630231=642697593ocao817|pv:7; _gscbrs_883630231=1' -H 'Connection: keep-alive' --data 'col=1&appid=1&webid=3&path=%2F&columnid=167&sourceContentType=1&unitid=4278&webname=%E4%B8%AD%E5%9B%BD%C2%B7%E5%AE%81%E6%B3%A2+%E5%85%AC%E6%B0%91%E7%AB%99&permissiontype=0'
+
+Host => gtoc.ningbo.gov.cn
+User-Agent => Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0
+Accept => application/xml, text/xml, */*; q=0.01
+Accept-Language => en-US,en;q=0.5
+Accept-Encoding => gzip, deflate
+Content-type => application/x-www-form-urlencoded; charset=UTF-8
+X-Requested-With => XMLHttpRequest
+
+
+QueryString:
+startrecord: "46"
+endrecord: "90"
+perpage: 15
+
+FormData:
+col: 1
+appid: 1
+webid: 3
+path: /
+columnid: 167
+sourceContentType: 1
+unitid: 4278
+webname: 中国·宁波+公民站
+permissiontype: 0

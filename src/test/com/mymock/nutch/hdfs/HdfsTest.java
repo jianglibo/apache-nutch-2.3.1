@@ -3,6 +3,7 @@ package com.mymock.nutch.hdfs;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -26,11 +27,6 @@ public class HdfsTest extends BaseFort {
 	@Test
 	public void createFolder() throws IOException {
 
-		URI uri = URI.create("hdfs://nn.intranet.fh.gov.cn/");
-		Path path = new Path(uri);
-		assertTrue(path.isRoot());
-		assertThat(path.depth(), equalTo(0));
-		
 		FileSystem fs = getFs();
 		Path homed = fs.getHomeDirectory();
 		printme(homed);
@@ -39,7 +35,7 @@ public class HdfsTest extends BaseFort {
 		printme(fs.exists(new Path("/user/root")));
 		printme(fs.exists(new Path("/user")));
 		
-		RemoteIterator<LocatedFileStatus> it = fs.listFiles(path, false);
+		RemoteIterator<LocatedFileStatus> it = fs.listFiles(new Path("/"), false);
 		while (it.hasNext()) {
 			LocatedFileStatus lfstatus = it.next();
 			printme(lfstatus.getPath());
@@ -53,7 +49,7 @@ public class HdfsTest extends BaseFort {
 		fs.mkdirs(t1);
 		fs.mkdirs(t1);
 		fs.mkdirs(t1);
-		assertTrue(fs.exists(t1));
+		assertTrue("/usr/root/t1 should created.", fs.exists(t1));
 		fs.delete(t1, false);
 		assertFalse(fs.exists(t1));
 		Path tfile = new Path("/usr/root/t1.txt");
@@ -80,8 +76,7 @@ public class HdfsTest extends BaseFort {
 	public void testConfigration() {
 		Assert.assertTrue(true);
 		 Configuration conf = new Configuration();
-		 assertThat(conf.get("fs.defaultFS"),
-		 equalTo("hdfs://nn.intranet.fh.gov.cn"));
+		 assertNotNull(conf.get("fs.defaultFS"));
 	}
 
 }

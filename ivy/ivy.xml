@@ -92,6 +92,13 @@
 
     <dependency org="org.hsqldb" name="hsqldb" rev="2.2.8" conf="*->default" />
     <dependency org="org.jdom" name="jdom" rev="1.1" conf="test->default"/>
+    
+    <!-- http://mvnrepository.com/artifact/org.apache.commons/commons-configuration2 -->
+	<dependency org="org.apache.commons" name="commons-configuration2" rev="2.0"/>
+	<!-- http://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+	<dependency org="commons-beanutils" name="commons-beanutils" rev="1.9.2"/>
+	
+    
 
     <dependency org="org.mockito" name="mockito-all" rev="1.9.5" conf="test->default"/>
     <dependency org="org.springframework" name="spring-test" rev="4.0.4.RELEASE" conf="test->default"/>

@@ -19,14 +19,14 @@ proc ::SiteSwitcher::switchSite {rawParamDict actions} {
   set siteId [join $actions ,]
   set conf [file normalize [file join $::baseDir conf]]
 
-  if {[::CommonUtil::whereami] eq $siteId} {
-    if {[file exists $conf]} {
-      if {[llength [glob -nocomplain -directory $conf -type f *]] > 0} {
-        puts "alreay in $siteId"
-        exit 0
-      }
-    }
-  }
+  #if {[::CommonUtil::whereami] eq $siteId} {
+  #  if {[file exists $conf]} {
+  #    if {[llength [glob -nocomplain -directory $conf -type f *]] > 0} {
+  #      puts "alreay in $siteId"
+  #      exit 0
+  #    }
+  #  }
+  #}
 
   set confDefault [file normalize [file join $::baseDir conf-default]]
 
