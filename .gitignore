@@ -72,3 +72,4 @@ $RECYCLE.BIN/
 
 conf/
 **/whereami.txt
+nohup.out

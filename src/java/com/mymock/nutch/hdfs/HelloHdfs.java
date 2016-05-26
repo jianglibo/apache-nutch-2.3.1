@@ -1,4 +1,4 @@
-package com.mymock.hadoop.hdfs;
+package com.mymock.nutch.hdfs;
 
 public class HelloHdfs {
 	
