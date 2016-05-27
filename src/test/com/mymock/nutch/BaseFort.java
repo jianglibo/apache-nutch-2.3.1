@@ -13,6 +13,7 @@ public class BaseFort {
 		return fs;
 	}
 	
+
 	public void printme(Object o) {
 		System.out.println(o);
 	}
