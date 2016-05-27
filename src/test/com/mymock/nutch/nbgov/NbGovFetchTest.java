@@ -1,30 +1,34 @@
 package com.mymock.nutch.nbgov;
 
-import java.util.List;
-import java.util.Map.Entry;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
-import org.apache.http.client.fluent.Executor;
-import org.apache.http.client.fluent.Request;
+import java.io.IOException;
+import java.util.List;
+
+import org.apache.http.client.ClientProtocolException;
 import org.junit.Test;
 
 import com.mymock.nutch.BaseFort;
-import com.mymock.nutch.ConfigurationUtil;
-import com.mymock.nutch.LocalExecutor;
 
 public class NbGovFetchTest extends BaseFort {
 
+
 	@Test
-	public void fetch() {
-		Executor executor = LocalExecutor.INSTANCE.get();
+	public void testGetUrls() {
+		QsFd qsfd = NbgovConfHolder.INSTANCE.get().getUrls().get("jrgz");
+		List<String> urlsToFetch = qsfd.getFetchUrls(100, 3);
+		assertThat(urlsToFetch.size(), equalTo(3));
+	}
+
+	@Test
+	public void fetch() throws ClientProtocolException, IOException {
+		QsFd qsfd = NbgovConfHolder.INSTANCE.get().getUrls().get("jrgz");
+		String urlToFetch = qsfd.getFetchUrls(0, 3).get(0);
 		
-		NbgovHttpCustom hpc = ConfigurationUtil.getConfig("mysite.yml", NbgovHttpCustom.class);
-		for(Entry<String, QsFd> entry : hpc.getUrls().entrySet()) {
-			List<String> urlsToFetch = entry.getValue().getFetchUrls(100, 3);
-			urlsToFetch.forEach(url -> {
-				printme(url);
-			});
-//			Request req = Request.Post(entry.getValue().getUrl());
-		}
+		NbgovListFetcher nf = new NbgovListFetcher();
+		List<String> urls = nf.fetch(qsfd, urlToFetch);
 		
+		assertThat("should return 46 items", urls.size(), equalTo(46));
 	}
 }

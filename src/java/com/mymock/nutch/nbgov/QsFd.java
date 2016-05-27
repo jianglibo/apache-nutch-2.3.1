@@ -16,6 +16,11 @@ public class QsFd {
 
 	public List<String> getFetchUrls(int total, int pages) {
 		int perpage = Integer.valueOf(queryStrings.get("perpage"));
+		
+		if (total == 0) {
+			total = perpage; 
+		}
+
 		int startrecord = 1;
 		int endrecord = 1;
 
@@ -23,12 +28,18 @@ public class QsFd {
 
 		while (endrecord < total) {
 			endrecord = startrecord + perpage * pages - 1;
-			urlsToFetch.add(HttpUrlUtils.appendQueryString(getUrl(), "startrecord", String.valueOf(startrecord),
-					"endrecord", String.valueOf(endrecord), "perpage", String.valueOf(perpage)));
+			if (endrecord > total) {
+				endrecord = total;
+			}
+			urlsToFetch.add(createAurl(startrecord, endrecord, perpage));
 			startrecord = endrecord + 1;
 		}
-		
 		return urlsToFetch;
+	}
+	
+	private String createAurl(int startrecord, int endrecord, int perpage) {
+		return HttpUrlUtils.appendQueryString(getUrl(), "startrecord", String.valueOf(startrecord),
+				"endrecord", String.valueOf(endrecord), "perpage", String.valueOf(perpage));
 	}
 
 	public Map<String, String> getQueryStrings() {

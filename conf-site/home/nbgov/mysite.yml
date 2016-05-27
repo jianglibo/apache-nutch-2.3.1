@@ -1,0 +1,25 @@
+headers:
+  Host: gtoc.ningbo.gov.cn
+  User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0
+  Accept: application/xml, text/xml, */*; q=0.01
+  Accept-Language: en-US,en;q=0.5
+  Accept-Encoding: gzip, deflate
+  Content-type: application/x-www-form-urlencoded; charset=UTF-8
+  X-Requested-With: XMLHttpRequest
+urls:
+  jrgz:
+    url: http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp
+    queryStrings:
+      startrecord: 1
+      endrecord: 35
+      perpage: 15
+    formDatas:
+      ol: 1
+      appid: 1
+      webid: 3
+      path: /
+      columnid: 167
+      sourceContentType: 1
+      unitid: 4278
+      webname: 中国·宁波+公民站
+      permissiontype: 0
