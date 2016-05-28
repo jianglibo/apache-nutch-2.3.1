@@ -32,4 +32,13 @@ public class FetchResultSaverDummy implements FetchResultSaver {
 		this.saveCount = saveCount;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mymock.nutch.nbgov.FetchResultSaver#done()
+	 */
+	@Override
+	public void done() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

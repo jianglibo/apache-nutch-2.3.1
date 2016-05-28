@@ -13,10 +13,14 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mymock.nutch.LocalRequestExecutor;
 
 public class NbgovOneUrlFetcher implements Callable<FetchResult> {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(NbgovOneUrlFetcher.class);
 	
 	protected static final Pattern meta = Pattern.compile(".*?<totalrecord>(\\d+)</totalrecord>", Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
 	
@@ -24,15 +28,15 @@ public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 	
 	private NbgovCatalogConfig catalog;
 	
-	private String tragetUrl;
+	private String targetUrl;
 	
 	public NbgovOneUrlFetcher(NbgovCatalogConfig catalog, String targetUrl) {
 		this.catalog = catalog;
-		this.tragetUrl = targetUrl;
+		this.targetUrl = targetUrl;
 	}
 	
 	private int getTotal(String content) throws ClientProtocolException, IOException {
-		Matcher m = meta.matcher(getContent());
+		Matcher m = meta.matcher(content);
 		if (m.lookingAt()) {
 			return Integer.valueOf(m.group(1));
 		}
@@ -57,7 +61,7 @@ public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 	private String getContent() throws ClientProtocolException, IOException {
 		
 		Executor executor = LocalRequestExecutor.getInstance();
-		Request r = Request.Post(tragetUrl);
+		Request r = Request.Post(targetUrl);
 		NbgovConfig.getInstance().getHeaders().entrySet().forEach(entry -> {
 			r.addHeader(entry.getKey(), entry.getValue());
 		});
@@ -65,8 +69,9 @@ public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 		List<NameValuePair> nvps = (new ArrayList<>(catalog.getFormDatas().entrySet())).stream()
 				.map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 		r.bodyForm(nvps);
-		
+		LOGGER.info("start fetching from {}", targetUrl);
 		String content = executor.execute(r).returnContent().asString();
+		LOGGER.info("fetching {} done.", targetUrl);
 		return content;
 	}
 

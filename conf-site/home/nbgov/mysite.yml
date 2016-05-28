@@ -1,5 +1,6 @@
 fetchThreads: 10
 batchNumber: 100
+seedFolder: urls/nbgov
 seedUrls:
   - http://www.nb.gov.cn/
   - http://gtoc.ningbo.gov.cn/
@@ -15,7 +16,7 @@ headers:
   X-Requested-With: XMLHttpRequest
 catagories:
   jrgz:
-    pageLimit: 0
+    pageLimit: 2
     baseUrl: http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp
     queryStrings:
       startrecord: 1

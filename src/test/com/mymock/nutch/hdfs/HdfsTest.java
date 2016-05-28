@@ -24,7 +24,7 @@ public class HdfsTest extends BaseFort {
 	@Test
 	public void createFolder() throws IOException {
 
-		FileSystem fs = getFs();
+		FileSystem fs = FileSystemInstance.get();
 		Path homed = fs.getHomeDirectory();
 		printme(homed);
 		
@@ -41,7 +41,7 @@ public class HdfsTest extends BaseFort {
 	
 	@Test
 	public void testDir() throws IOException {
-		FileSystem fs = getFs();
+		FileSystem fs = FileSystemInstance.get();
 		Path t1 = new Path("/user/root/t1");
 		fs.mkdirs(t1);
 		fs.mkdirs(t1);

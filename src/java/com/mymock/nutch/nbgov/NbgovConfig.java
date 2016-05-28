@@ -11,6 +11,8 @@ public class NbgovConfig {
 	
 	private List<String> seedUrls;
 	
+	private String seedFolder;
+	
 	private int fetchThreads;
 	
 	private int batchNumber;
@@ -69,7 +71,17 @@ public class NbgovConfig {
 	public static NbgovConfig getInstance() {
 		return NbgovConfigHolder.INSTANCE.get();
 	}
-	
+
+
+	public String getSeedFolder() {
+		return seedFolder;
+	}
+
+	public void setSeedFolder(String seedFolder) {
+		this.seedFolder = seedFolder;
+	}
+
+
 	private static enum NbgovConfigHolder {
 		INSTANCE;
 		private NbgovConfig singleton;

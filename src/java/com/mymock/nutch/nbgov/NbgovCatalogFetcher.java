@@ -1,5 +1,10 @@
 package com.mymock.nutch.nbgov;
 
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -13,6 +18,8 @@ import com.google.common.util.concurrent.ListeningExecutorService;
  *         fetch all pages of one catalog.
  */
 public class NbgovCatalogFetcher {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(NbgovCatalogFetcher.class);
 
 	private NbgovConfig config = NbgovConfig.getInstance();
 
@@ -36,12 +43,13 @@ public class NbgovCatalogFetcher {
 		NbgovFetchFutureCallback ffcb = new NbgovFetchFutureCallback(getCatalog(), saver);
 		int poolSize = config.getFetchThreads();
 		int currentPage = 0;
-
+		LOGGER.info("start fetch with {} threads", poolSize);
 		while (true) {
 			if (ffcb.isDone()) {
 				break;
 			}
 			int poolRemains = poolSize - ffcb.getRunningNumber();
+			int roundStart = currentPage;
 			if (poolRemains > 0) {
 				for (int i = 0; i < poolRemains * 2; i++) {
 					if (currentPage < catalog.getPageLimit()) {
@@ -55,13 +63,11 @@ public class NbgovCatalogFetcher {
 					}
 				}
 			}
+			LOGGER.info("submit task from {} to {}", roundStart, currentPage);
 			Thread.sleep(100);
 		}
-		
-		// waiting for pendding thread to finish.
-		while (ffcb.getRunningNumber() > 0) {
-			Thread.sleep(100);
-		}
+		service.shutdown();
+		service.awaitTermination(10, TimeUnit.MINUTES);
 	}
 
 	public NbgovCatalogConfig getCatalog() {

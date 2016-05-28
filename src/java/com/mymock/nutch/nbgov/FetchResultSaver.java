@@ -7,4 +7,6 @@ package com.mymock.nutch.nbgov;
  */
 public interface FetchResultSaver {
 	void save(FetchResult fr);
+	
+	void done();
 }
