@@ -3,7 +3,11 @@ package com.mymock.nutch.nbgov;
 import java.util.List;
 import java.util.Map;
 
+import com.mymock.nutch.ConfigurationUtil;
+
 public class NbgovConfig {
+	
+	private static final String CONF_FILE = "mysite.yml"; 
 	
 	private List<String> seedUrls;
 	
@@ -60,6 +64,23 @@ public class NbgovConfig {
 
 	public void setCatagories(Map<String, NbgovCatalogConfig> catagory) {
 		this.catagories = catagory;
+	}
+	
+	public static NbgovConfig getInstance() {
+		return NbgovConfigHolder.INSTANCE.get();
+	}
+	
+	private static enum NbgovConfigHolder {
+		INSTANCE;
+		private NbgovConfig singleton;
+		
+		private NbgovConfigHolder() {
+			this.singleton = ConfigurationUtil.getConfig(CONF_FILE, NbgovConfig.class);
+		}
+		
+		public NbgovConfig get() {
+			return singleton;
+		}
 	}
 	
 }

@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 
 import com.google.common.util.concurrent.FutureCallback;
-import com.mymock.nutch.nbgov.NbgovListeningFutureServiceHolder;
+import com.mymock.nutch.nbgov.NbgovListeningFutureService;
 
 public class ConCurrentUtilTest extends BaseFort {
 
@@ -38,7 +38,7 @@ public class ConCurrentUtilTest extends BaseFort {
 			}
 		};
 		
-		ConcurrentUtil.submitAndWait(NbgovListeningFutureServiceHolder.INSTANCE.get(), ca);
+		ConcurrentUtil.submitAndWait(NbgovListeningFutureService.getInstance(), ca);
 		
 	}
 

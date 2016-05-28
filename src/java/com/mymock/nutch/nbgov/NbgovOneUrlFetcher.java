@@ -14,7 +14,7 @@ import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.mymock.nutch.LocalExecutor;
+import com.mymock.nutch.LocalRequestExecutor;
 
 public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 	
@@ -24,11 +24,11 @@ public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 	
 	private NbgovCatalogConfig catalog;
 	
-	private String baseUrl;
+	private String tragetUrl;
 	
-	public NbgovOneUrlFetcher(NbgovCatalogConfig catalog, String baseUrl) {
+	public NbgovOneUrlFetcher(NbgovCatalogConfig catalog, String targetUrl) {
 		this.catalog = catalog;
-		this.baseUrl = baseUrl;
+		this.tragetUrl = targetUrl;
 	}
 	
 	private int getTotal(String content) throws ClientProtocolException, IOException {
@@ -55,11 +55,10 @@ public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 	}
 	
 	private String getContent() throws ClientProtocolException, IOException {
-		NbgovConfig hpc = NbgovConfigHolder.INSTANCE.get();
 		
-		Executor executor = LocalExecutor.INSTANCE.get();
-		Request r = Request.Post(baseUrl);
-		hpc.getHeaders().entrySet().forEach(entry -> {
+		Executor executor = LocalRequestExecutor.getInstance();
+		Request r = Request.Post(tragetUrl);
+		NbgovConfig.getInstance().getHeaders().entrySet().forEach(entry -> {
 			r.addHeader(entry.getKey(), entry.getValue());
 		});
 		

@@ -5,15 +5,14 @@ package com.mymock.nutch.nbgov;
  * 
  * May 28, 2016
  */
-public class FetchResultSaverHbase implements FetchResultSaver {
+public class FetchResultSaverHdfs implements FetchResultSaver {
+	
 
 	/* (non-Javadoc)
 	 * @see com.mymock.nutch.nbgov.FetchResultSaver#save(com.mymock.nutch.nbgov.FetchResult)
 	 */
 	@Override
 	public void save(FetchResult fr) {
-		// TODO Auto-generated method stub
 		
 	}
-
 }

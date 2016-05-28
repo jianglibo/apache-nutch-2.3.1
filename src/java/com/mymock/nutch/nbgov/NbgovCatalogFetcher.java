@@ -14,11 +14,16 @@ import com.google.common.util.concurrent.ListeningExecutorService;
  */
 public class NbgovCatalogFetcher {
 
-	private NbgovConfig config = NbgovConfigHolder.INSTANCE.get();
+	private NbgovConfig config = NbgovConfig.getInstance();
 
 	private final NbgovCatalogConfig catalog;
 
 	private final FetchResultSaver saver;
+	
+	public NbgovCatalogFetcher(NbgovCatalogConfig catalog, FetchResultSaver saver) {
+		this.catalog = catalog.init();
+		this.saver = saver;
+	}
 
 	public NbgovCatalogFetcher(String catalogName, FetchResultSaver saver) {
 		this.catalog = config.getCatagories().get(catalogName).init();
@@ -26,7 +31,7 @@ public class NbgovCatalogFetcher {
 	}
 
 	public void start() throws InterruptedException {
-		ListeningExecutorService service = NbgovListeningFutureServiceHolder.INSTANCE.get();
+		ListeningExecutorService service = NbgovListeningFutureService.getInstance();
 		// we use only one future callback.
 		NbgovFetchFutureCallback ffcb = new NbgovFetchFutureCallback(getCatalog(), saver);
 		int poolSize = config.getFetchThreads();
@@ -45,16 +50,18 @@ public class NbgovCatalogFetcher {
 						Futures.addCallback(fetch, ffcb.incrementIn());
 						currentPage++;
 					} else {
+						ffcb.setDone(true);
 						break;
 					}
 				}
 			}
-			Thread.sleep(10);
+			Thread.sleep(100);
 		}
-	}
-
-	protected void doStart() {
-
+		
+		// waiting for pendding thread to finish.
+		while (ffcb.getRunningNumber() > 0) {
+			Thread.sleep(100);
+		}
 	}
 
 	public NbgovCatalogConfig getCatalog() {

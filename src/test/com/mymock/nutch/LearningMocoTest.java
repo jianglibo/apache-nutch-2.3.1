@@ -1,100 +1,82 @@
-package com.mymock.nutch.nbgov;
+package com.mymock.nutch;
 
 import static com.github.dreamhead.moco.Moco.and;
 import static com.github.dreamhead.moco.Moco.by;
 import static com.github.dreamhead.moco.Moco.eq;
 import static com.github.dreamhead.moco.Moco.httpServer;
+import static com.github.dreamhead.moco.Moco.latency;
 import static com.github.dreamhead.moco.Moco.method;
 import static com.github.dreamhead.moco.Moco.query;
 import static com.github.dreamhead.moco.Moco.uri;
 import static com.github.dreamhead.moco.Moco.with;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.fluent.Content;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.github.dreamhead.moco.HttpMethod;
 import com.github.dreamhead.moco.HttpServer;
-import com.mymock.nutch.BaseForMocoRunner;
+import com.github.dreamhead.moco.MocoConfig;
+import com.github.dreamhead.moco.Request;
+import com.github.dreamhead.moco.RequestMatcher;
+import com.github.dreamhead.moco.matcher.AbstractRequestMatcher;
 
 /**
  * @author jianglibo@gmail.com
  * 
- * May 28, 2016
+ *         May 28, 2016
  */
-public class NbgovCatalogFetcherTest extends BaseForMocoRunner {
-	
+public class LearningMocoTest extends BaseForMocoRunner {
+
 	private static String pageOneResponse = "<datastore><totalrecord>31837</totalrecord><totalpage>2123</totalpage><recordset><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/29/art_158_362456.html' class='bt_content_w' title='关于住房公积金热点问题的解答' target='_blank'>关于住房公积金热点问题的解答</a></td><td width='100' align='center' style='font-size:15px'>2016-05-29</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/29/art_158_362451.html' class='bt_content_w' title='海曙“非遗”传承充满青春气息' target='_blank'>海曙“非遗”传承充满青春气息</a></td><td width='100' align='center' style='font-size:15px'>2016-05-29</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/29/art_158_362455.html' class='bt_content_w' title='鄞州启动农村环境卫生创建行动' target='_blank'>鄞州启动农村环境卫生创建行动</a></td><td width='100' align='center' style='font-size:15px'>2016-05-29</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/29/art_158_362454.html' class='bt_content_w' title='北仑团区委开展慰问困难青少年活动' target='_blank'>北仑团区委开展慰问困难青少年活动</a></td><td width='100' align='center' style='font-size:15px'>2016-05-29</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/29/art_158_362453.html' class='bt_content_w' title='宁波市第一医院慈溪医院迁至龙山新城' target='_blank'>宁波市第一医院慈溪医院迁至龙山新城</a></td><td width='100' align='center' style='font-size:15px'>2016-05-29</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/28/art_158_362431.html' class='bt_content_w' title='全市商业车险改革5月28日启动' target='_blank'>全市商业车险改革5月28日启动</a></td><td width='100' align='center' style='font-size:15px'>2016-05-28</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/28/art_158_362432.html' class='bt_content_w' title='宁波多肉植物展开幕' target='_blank'>宁波多肉植物展开幕</a></td><td width='100' align='center' style='font-size:15px'>2016-05-28</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/28/art_158_362435.html' class='bt_content_w' title='新碶党员“挑刺”谏言助力垃圾分类' target='_blank'>新碶党员“挑刺”谏言助力垃圾分类</a></td><td width='100' align='center' style='font-size:15px'>2016-05-28</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/28/art_158_362434.html' class='bt_content_w' title='小港街道开展夏季市容环境集中大整治' target='_blank'>小港街道开展夏季市容环境集中大整治</a></td><td width='100' align='center' style='font-size:15px'>2016-05-28</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362123.html' class='bt_content_w' title='我市实现基本公共服务事项网上办理' target='_blank'>我市实现基本公共服务事项网上办理</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362100.html' class='bt_content_w' title='宁波四项举措走在全国医改前列' target='_blank'>宁波四项举措走在全国医改前列</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362099.html' class='bt_content_w' title='第八届中国湖泊休闲节开幕' target='_blank'>第八届中国湖泊休闲节开幕</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362183.html' class='bt_content_w' title='宁波九成毕业生前往企业就职' target='_blank'>宁波九成毕业生前往企业就职</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362104.html' class='bt_content_w' title='宁波市5月28日起预售端午节汽车票' target='_blank'>宁波市5月28日起预售端午节汽车票</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362117.html' class='bt_content_w' title='首笔城镇住房综合保险赔款在奉化兑现' target='_blank'>首笔城镇住房综合保险赔款在奉化兑现</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362142.html' class='bt_content_w' title='海曙连续四年拍视频自曝“脏乱差”' target='_blank'>海曙连续四年拍视频自曝“脏乱差”</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_158_362101.html' class='bt_content_w' title='鄞州启动“斑马线上见文明”活动' target='_blank'>鄞州启动“斑马线上见文明”活动</a></td><td width='100' align='center' style='font-size:15px'>2016-05-27</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361782.html' class='bt_content_w' title='宁波车险改革5月28日启动' target='_blank'>宁波车险改革5月28日启动</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361775.html' class='bt_content_w' title='宁波公共自行车借还更“智慧”' target='_blank'>宁波公共自行车借还更“智慧”</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361809.html' class='bt_content_w' title='宁波92号汽油上调至5.94元/升' target='_blank'>宁波92号汽油上调至5.94元/升</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361777.html' class='bt_content_w' title='宁波市纸质电费单改为电子账单' target='_blank'>宁波市纸质电费单改为电子账单</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361774.html' class='bt_content_w' title='宁波剩11.6万张二代身份证待换领' target='_blank'>宁波剩11.6万张二代身份证待换领</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361876.html' class='bt_content_w' title='宁波最长海底隧道年底开建' target='_blank'>宁波最长海底隧道年底开建</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361772.html' class='bt_content_w' title='宁波市将组建平安志愿者服务支队' target='_blank'>宁波市将组建平安志愿者服务支队</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/26/art_158_361816.html' class='bt_content_w' title='宁波主城区6月起推行菜牛定点屠宰' target='_blank'>宁波主城区6月起推行菜牛定点屠宰</a></td><td width='100' align='center' style='font-size:15px'>2016-05-26</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361593.html' class='bt_content_w' title='宁波将取消农业和非农业户口之分' target='_blank'>宁波将取消农业和非农业户口之分</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361615.html' class='bt_content_w' title='2016年宁波智慧城市试点项目公布' target='_blank'>2016年宁波智慧城市试点项目公布</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361597.html' class='bt_content_w' title='宁波市设立港城工匠发展基金' target='_blank'>宁波市设立港城工匠发展基金</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361595.html' class='bt_content_w' title='宁波市推动工程车礼让斑马线常态化' target='_blank'>宁波市推动工程车礼让斑马线常态化</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361638.html' class='bt_content_w' title='我市严厉打击私家车从事非法营运' target='_blank'>我市严厉打击私家车从事非法营运</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361594.html' class='bt_content_w' title='宁波全面打响幼鱼保护攻坚战' target='_blank'>宁波全面打响幼鱼保护攻坚战</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361637.html' class='bt_content_w' title='宁海防洪生态并重整治河道' target='_blank'>宁海防洪生态并重整治河道</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/25/art_158_361640.html' class='bt_content_w' title='海曙60家餐饮店承诺履行食安主体责任' target='_blank'>海曙60家餐饮店承诺履行食安主体责任</a></td><td width='100' align='center' style='font-size:15px'>2016-05-25</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360867.html' class='bt_content_w' title='宁波市高速路网建设挺进“两环十射”' target='_blank'>宁波市高速路网建设挺进“两环十射”</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360869.html' class='bt_content_w' title='各级机关考试录用公务员笔试成绩揭晓' target='_blank'>各级机关考试录用公务员笔试成绩揭晓</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360883.html' class='bt_content_w' title='市国税局助纳税人“码”上读懂营改增' target='_blank'>市国税局助纳税人“码”上读懂营改增</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360874.html' class='bt_content_w' title='三年后宁波至苏州车程可缩短至2小时' target='_blank'>三年后宁波至苏州车程可缩短至2小时</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360924.html' class='bt_content_w' title='宁波乡村游人气高涨' target='_blank'>宁波乡村游人气高涨</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360871.html' class='bt_content_w' title='海曙首次尝试国有资产网上拍卖' target='_blank'>海曙首次尝试国有资产网上拍卖</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360892.html' class='bt_content_w' title='奉化开展大规模幼鱼保护专项执法' target='_blank'>奉化开展大规模幼鱼保护专项执法</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/24/art_158_360920.html' class='bt_content_w' title='海曙区启动社区顽疾专项整治行动' target='_blank'>海曙区启动社区顽疾专项整治行动</a></td><td width='100' align='center' style='font-size:15px'>2016-05-24</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/23/art_158_360584.html' class='bt_content_w' title='宁波乡村旅游率先全域化' target='_blank'>宁波乡村旅游率先全域化</a></td><td width='100' align='center' style='font-size:15px'>2016-05-23</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/23/art_158_360596.html' class='bt_content_w' title='宁波府城隍庙修缮方案敲定' target='_blank'>宁波府城隍庙修缮方案敲定</a></td><td width='100' align='center' style='font-size:15px'>2016-05-23</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/23/art_158_360658.html' class='bt_content_w' title='宁波家庭医生制服务走进市民家中' target='_blank'>宁波家庭医生制服务走进市民家中</a></td><td width='100' align='center' style='font-size:15px'>2016-05-23</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/23/art_158_360621.html' class='bt_content_w' title='宁波三江口第一代成套房启动危改' target='_blank'>宁波三江口第一代成套房启动危改</a></td><td width='100' align='center' style='font-size:15px'>2016-05-23</td></tr>]]></record><record><![CDATA[<tr><td width='10' height='28' align='center'><span><img src='/picture/1/s1603211448599678585.png' align='absmiddle' border='0'></span></td><td align='left'><a href='http://gtoc.ningbo.gov.cn/art/2016/5/23/art_158_360598.html' class='bt_content_w' title='宁波首个老兵法律援助工作站成立' target='_blank'>宁波首个老兵法律援助工作站成立</a></td><td width='100' align='center' style='font-size:15px'>2016-05-23</td></tr>]]></record></recordset></datastore>";
-	
-	private void createAndStartServer(int totalPages, NbgovCatalogConfig catalog) {
-		HttpServer server = httpServer(12306);
-		
-		for(int i = 0; i < totalPages; i++) {
-			server.request(and( //
-					by(uri("/")), //
-					eq(query("startrecord"), (i * catalog.getPerpage() + 1) + ""),//
-					by(method(HttpMethod.POST))//
-			)).response(with(pageOneResponse));
+
+	private class PostRm extends AbstractRequestMatcher {
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * com.github.dreamhead.moco.RequestMatcher#match(com.github.dreamhead.
+		 * moco.Request)
+		 */
+		@Override
+		public boolean match(Request r) {
+			return true;
 		}
-		server.request(and( //
-				by(uri("/")), //
-				by(method(HttpMethod.POST))//
-		)).response(with("<datastore></datastore>"));
-		setup(server);
-	}
-	
-	private void reqTimes(int pageLimit, int serverLimit, long expected, boolean eq) throws InterruptedException {
-		FetchResultSaverDummy frs = new FetchResultSaverDummy();
-		
-		NbgovCatalogConfig ncc = NbgovConfig.getInstance().getCatagories().get("jrgz");
-		ncc.setPerpage(15);
-		ncc.setPageLimit(pageLimit);
-		ncc.setBaseUrl("http://localhost:12306");
-		
-		createAndStartServer(serverLimit, ncc);
-		
-		NbgovCatalogFetcher ncf = new NbgovCatalogFetcher(ncc, frs);
-		ncf.start();
-		
-		if (eq) {
-			assertThat("should be called " + expected + " times", frs.getSaveCount(), equalTo(expected));			
-		} else {
-			assertThat("should less than" + expected + " times", frs.getSaveCount(), lessThan(expected));
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * com.github.dreamhead.moco.matcher.AbstractRequestMatcher#doApply(com.
+		 * github.dreamhead.moco.MocoConfig)
+		 */
+		@Override
+		public RequestMatcher doApply(MocoConfig mc) {
+			return null;
 		}
+
 	}
-	
-	private int actallimit(int svlimit) {
-		int poolLimit = NbgovConfig.getInstance().getFetchThreads() * 2;
-		int ground = svlimit % poolLimit;
-		if (svlimit % poolLimit != 0) {
-			ground++;
-		}
-		ground = ground * poolLimit;
-		return ground;
-	}
-	
-	/**
-	 * pageLimit has high proority. even server has more data, stop at limit.
-	 * @throws InterruptedException
-	 */
+
+
+
 	@Test
-	public void pageLimit1() throws InterruptedException {
-		reqTimes(2, 10, 2, true);
+	public void getExists() throws ClientProtocolException, IOException {
+		Content content = org.apache.http.client.fluent.Request.Get("http://localhost:12306?startrecord=1").execute().returnContent();
+		assertTrue("should contains totalrecord", content.asString().contains("<totalrecord>31837</totalrecord>"));
+		
+		content = org.apache.http.client.fluent.Request.Get("http://localhost:12306?startrecord=46").execute().returnContent();
+		assertTrue("should contains totalrecord", content.asString().contains("<totalrecord>31837</totalrecord>"));
+		
+		content = org.apache.http.client.fluent.Request.Get("http://localhost:12306?startrecord=5").execute().returnContent();
+		assertFalse("should not contains totalrecord", content.asString().contains("<totalrecord>31837</totalrecord>"));
 	}
 	
-	/**
-	 * when server reach limit, but we has submit 2 times of poolSize, so poolSize * 2. when server return zero records in this round of submit,
-	 * next roud may stop at random positon.
-	 * @throws InterruptedException
-	 */
-	@Test
-	public void pageLimit2() throws InterruptedException {
-		reqTimes(10, 5, actallimit(5), false);
-	}
-	
-	@Test
-	public void pageLimit3() throws InterruptedException {
-		reqTimes(Integer.MAX_VALUE, 50, actallimit(50), false);
-	}
+
 }

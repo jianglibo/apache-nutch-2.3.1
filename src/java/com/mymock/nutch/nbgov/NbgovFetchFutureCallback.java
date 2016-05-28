@@ -47,6 +47,8 @@ public class NbgovFetchFutureCallback implements FutureCallback<FetchResult> {
 	public void setTotalPage(int totalNumber) {
 		if (totalNumber > 0) {
 			this.totalPage = totalNumber / catalog.getPerpage();			
+		} else {
+			setDone(true);
 		}
 	}
 	
@@ -89,6 +91,10 @@ public class NbgovFetchFutureCallback implements FutureCallback<FetchResult> {
 	 */
 	public void setDone(boolean done) {
 		this.done = done;
+	}
+	
+	public int getTotalPage() {
+		return totalPage;
 	}
 
 }
