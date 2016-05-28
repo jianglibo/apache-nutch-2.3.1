@@ -14,6 +14,8 @@ public class NbgovFetchFutureCallback implements FutureCallback<FetchResult> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NbgovFetchFutureCallback.class);
 
 	private final NbgovCatalogConfig catalog;
+	
+	private final FetchResultSaver saver;
 
 	private int totalPage;
 
@@ -25,7 +27,8 @@ public class NbgovFetchFutureCallback implements FutureCallback<FetchResult> {
 
 	private boolean done;
 
-	public NbgovFetchFutureCallback(NbgovCatalogConfig catalog) {
+	public NbgovFetchFutureCallback(NbgovCatalogConfig catalog, FetchResultSaver saver) {
+		this.saver = saver;
 		this.catalog = catalog;
 		this.inNumber = 0;
 		this.successNumber = 0;
@@ -66,7 +69,7 @@ public class NbgovFetchFutureCallback implements FutureCallback<FetchResult> {
 		try {
 			this.successNumber++;
 			setTotalPage(fr.getTotalNumber());
-			
+			saver.save(fr);
 			alterDone();
 		} finally {
 			lock.unlock();

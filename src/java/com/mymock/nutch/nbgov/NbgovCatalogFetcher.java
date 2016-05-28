@@ -18,14 +18,17 @@ public class NbgovCatalogFetcher {
 
 	private final NbgovCatalogConfig catalog;
 
-	public NbgovCatalogFetcher(String catalogName) {
-		this.catalog = config.getCatagories().get(catalogName).init();;
+	private final FetchResultSaver saver;
+
+	public NbgovCatalogFetcher(String catalogName, FetchResultSaver saver) {
+		this.catalog = config.getCatagories().get(catalogName).init();
+		this.saver = saver;
 	}
 
 	public void start() throws InterruptedException {
 		ListeningExecutorService service = NbgovListeningFutureServiceHolder.INSTANCE.get();
 		// we use only one future callback.
-		NbgovFetchFutureCallback ffcb = new NbgovFetchFutureCallback(getCatalog());
+		NbgovFetchFutureCallback ffcb = new NbgovFetchFutureCallback(getCatalog(), saver);
 		int poolSize = config.getFetchThreads();
 		int currentPage = 0;
 
@@ -49,9 +52,9 @@ public class NbgovCatalogFetcher {
 			Thread.sleep(10);
 		}
 	}
-	
+
 	protected void doStart() {
-		
+
 	}
 
 	public NbgovCatalogConfig getCatalog() {
