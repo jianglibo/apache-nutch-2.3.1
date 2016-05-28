@@ -37,7 +37,10 @@ if {! [dict exists $optionDict skipClass]} {
     ::CommonUtil::spawnCommand $nutchCmd {*}[concat $c $paramlist]
   }
 }
-puts "start crawl......."
+
 set start [clock milliseconds]
-::CommonUtil::spawnCommand $crawlCmd $seedFolder [dict get $ymlDict crawlID] [dict get $ymlDict numberOfRounds]
-puts "crawl done. costs: [expr ([clock milliseconds] - $start) / 60000] minuts."
+if {! [dict exists $optionDict classOnly]} {
+  puts "start crawl......."
+  ::CommonUtil::spawnCommand $crawlCmd $seedFolder [dict get $ymlDict crawlID] [dict get $ymlDict numberOfRounds]
+  puts "crawl done. costs: [expr ([clock milliseconds] - $start) / 60000] minuts."
+}
