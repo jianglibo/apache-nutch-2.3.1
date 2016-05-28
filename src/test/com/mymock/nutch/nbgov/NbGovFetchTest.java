@@ -16,19 +16,19 @@ public class NbGovFetchTest extends BaseFort {
 
 	@Test
 	public void testGetUrls() {
-		QsFd qsfd = NbgovConfHolder.INSTANCE.get().getUrls().get("jrgz");
+		NbgovCatalogConfig qsfd = NbgovConfigHolder.INSTANCE.get().getCatagories().get("jrgz");
 		List<String> urlsToFetch = qsfd.getFetchUrls(100, 3);
 		assertThat(urlsToFetch.size(), equalTo(3));
 	}
 
 	@Test
 	public void fetch() throws ClientProtocolException, IOException {
-		QsFd qsfd = NbgovConfHolder.INSTANCE.get().getUrls().get("jrgz");
+		NbgovCatalogConfig qsfd = NbgovConfigHolder.INSTANCE.get().getCatagories().get("jrgz");
 		String urlToFetch = qsfd.getFetchUrls(0, 3).get(0);
 		
-		NbgovListFetcher nf = new NbgovListFetcher();
-		List<String> urls = nf.fetch(qsfd, urlToFetch);
+		NbgovOneUrlFetcher nf = new NbgovOneUrlFetcher(qsfd, urlToFetch);
+		FetchResult fcob = nf.fetch();
 		
-		assertThat("should return 46 items", urls.size(), equalTo(46));
+		assertThat("should return 46 items", fcob.getExtractedUrls().size(), equalTo(46));
 	}
 }

@@ -3,6 +3,7 @@ package com.mymock.nutch.nbgov;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -15,17 +16,23 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.mymock.nutch.LocalExecutor;
 
-public class NbgovListFetcher {
+public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 	
 	protected static final Pattern meta = Pattern.compile(".*?<totalrecord>(\\d+)</totalrecord>", Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
 	
 	protected static final Pattern alink = Pattern.compile(".*?<a\\s+[^<]*?href=['\"]{1}([^'\"]+?)['\"]{1}[^<]+?<", Pattern.DOTALL|Pattern.CASE_INSENSITIVE);
 	
+	private NbgovCatalogConfig catalog;
 	
-//	<a href='http://gtoc.ningbo.gov.cn/art/2016/5/27/art_167_362116.html' class='bt_content_w' title='海曙连续四年拍视频自曝“脏乱差”' target='_blank'>海曙连续四年拍视频自曝“脏乱差”</a> 
+	private String baseUrl;
 	
-	public int getTotal(QsFd qsfd, String url) throws ClientProtocolException, IOException {
-		Matcher m = meta.matcher(getContent(qsfd, url));
+	public NbgovOneUrlFetcher(NbgovCatalogConfig catalog, String baseUrl) {
+		this.catalog = catalog;
+		this.baseUrl = baseUrl;
+	}
+	
+	private int getTotal(String content) throws ClientProtocolException, IOException {
+		Matcher m = meta.matcher(getContent());
 		if (m.lookingAt()) {
 			return Integer.valueOf(m.group(1));
 		}
@@ -33,12 +40,13 @@ public class NbgovListFetcher {
 	}
 	
 	
-	public List<String> fetch(QsFd qsfd, String url) throws ClientProtocolException, IOException {
-		return extractLins(getContent(qsfd, url));
+	public FetchResult fetch() throws ClientProtocolException, IOException {
+		String content = getContent();
+		return new FetchResult(extractLins(content), getTotal(content));
 	}
 	
 	protected List<String> extractLins(String content) {
-		Matcher m = NbgovListFetcher.alink.matcher(content);
+		Matcher m = NbgovOneUrlFetcher.alink.matcher(content);
 		List<String> urls = new ArrayList<>();
 		while(m.find()) {
 			urls.add(m.group(1));
@@ -46,20 +54,26 @@ public class NbgovListFetcher {
 		return urls;
 	}
 	
-	private String getContent(QsFd qsfd, String url) throws ClientProtocolException, IOException {
-		NbgovHttpCustom hpc = NbgovConfHolder.INSTANCE.get();
+	private String getContent() throws ClientProtocolException, IOException {
+		NbgovConfig hpc = NbgovConfigHolder.INSTANCE.get();
 		
 		Executor executor = LocalExecutor.INSTANCE.get();
-		Request r = Request.Post(url);
+		Request r = Request.Post(baseUrl);
 		hpc.getHeaders().entrySet().forEach(entry -> {
 			r.addHeader(entry.getKey(), entry.getValue());
 		});
 		
-		List<NameValuePair> nvps = (new ArrayList<>(qsfd.getFormDatas().entrySet())).stream()
+		List<NameValuePair> nvps = (new ArrayList<>(catalog.getFormDatas().entrySet())).stream()
 				.map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 		r.bodyForm(nvps);
 		
 		String content = executor.execute(r).returnContent().asString();
 		return content;
+	}
+
+
+	@Override
+	public FetchResult call() throws Exception {
+		return fetch();
 	}
 }

@@ -6,13 +6,36 @@ import java.util.Map;
 
 import com.mymock.nutch.HttpUrlUtils;
 
-public class QsFd {
+public class NbgovCatalogConfig {
 
 	private Map<String, String> queryStrings;
 
 	private Map<String, String> formDatas;
+	
+	private int pageLimit;
 
-	private String url;
+	private String baseUrl;
+	
+	private int perpage;
+
+	public NbgovCatalogConfig init() {
+		if (getPageLimit() == 0) {
+			setPageLimit(Integer.MAX_VALUE);
+		}
+		setPerpage(Integer.valueOf(queryStrings.get("perpage")));
+		return this;
+	}
+	/**
+	 * 
+	 * @param page zero based.
+	 * @return
+	 */
+	public String getPageUrl(int page) {
+		int perpage = Integer.valueOf(queryStrings.get("perpage"));
+		int startrecord = page * perpage + 1;
+		int endrecord = (page + 1) * perpage;
+		return createAurl(startrecord, endrecord, perpage);
+	}
 
 	public List<String> getFetchUrls(int total, int pages) {
 		int perpage = Integer.valueOf(queryStrings.get("perpage"));
@@ -38,7 +61,7 @@ public class QsFd {
 	}
 	
 	private String createAurl(int startrecord, int endrecord, int perpage) {
-		return HttpUrlUtils.appendQueryString(getUrl(), "startrecord", String.valueOf(startrecord),
+		return HttpUrlUtils.appendQueryString(getBaseUrl(), "startrecord", String.valueOf(startrecord),
 				"endrecord", String.valueOf(endrecord), "perpage", String.valueOf(perpage));
 	}
 
@@ -58,12 +81,37 @@ public class QsFd {
 		this.formDatas = formDatas;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getBaseUrl() {
+		return baseUrl;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
+	}
+
+	/**
+	 * @return the pageLimit
+	 */
+	public int getPageLimit() {
+		return pageLimit;
+	}
+
+	/**
+	 * @param pageLimit the pageLimit to set
+	 */
+	public void setPageLimit(int pageLimit) {
+		this.pageLimit = pageLimit;
+	}
+
+	/**
+	 * @param perpage the perpage to set
+	 */
+	public void setPerpage(int perpage) {
+		this.perpage = perpage;
+	}
+	
+	public int getPerpage() {
+		return perpage;
 	}
 
 }

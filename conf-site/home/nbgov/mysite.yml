@@ -1,3 +1,10 @@
+fetchThreads: 10
+batchNumber: 100
+seedUrls:
+  - http://www.nb.gov.cn/
+  - http://gtoc.ningbo.gov.cn/
+  - http://gtob.ningbo.gov.cn/
+  - http://gtog.ningbo.gov.cn/
 headers:
   Host: gtoc.ningbo.gov.cn
   User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0
@@ -6,9 +13,10 @@ headers:
   Accept-Encoding: gzip, deflate
   Content-type: application/x-www-form-urlencoded; charset=UTF-8
   X-Requested-With: XMLHttpRequest
-urls:
+catagories:
   jrgz:
-    url: http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp
+    pageLimit: 0
+    baseUrl: http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp
     queryStrings:
       startrecord: 1
       endrecord: 35

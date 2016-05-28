@@ -17,21 +17,21 @@ public class NbgovListTest extends BaseFort {
 
 	@Test
 	public void headers() {
-		NbgovHttpCustom hpc = NbgovConfHolder.INSTANCE.get();
-		assertThat(hpc.getHeaders().get("Content-type"), equalTo("application/x-www-form-urlencoded; charset=UTF-8"));
-		assertThat(hpc.getUrls().get("jrgz").getFormDatas().get("webname"), equalTo("中国·宁波+公民站"));
+		NbgovConfig nbCfg = NbgovConfigHolder.INSTANCE.get();
+		assertThat(nbCfg.getHeaders().get("Content-type"), equalTo("application/x-www-form-urlencoded; charset=UTF-8"));
+		assertThat(nbCfg.getCatagories().get("jrgz").getFormDatas().get("webname"), equalTo("中国·宁波+公民站"));
 	}
 	
 	@Test
 	public void testMeta() {
-		Matcher m = NbgovListFetcher.meta.matcher(content);
+		Matcher m = NbgovOneUrlFetcher.meta.matcher(content);
 		assertTrue("should match totalrecord.", m.lookingAt());
 		assertThat("should hoder totalrecord in group 1.", m.group(1), equalTo("3719"));
 	}
 	
 	@Test
 	public void testAlink() {
-		NbgovListFetcher nf = new NbgovListFetcher();
+		NbgovOneUrlFetcher nf = new NbgovOneUrlFetcher(null, null);
 		List<String> urls = nf.extractLins(content);
 		assertThat("should have 45 urls", urls.size(), equalTo(46));
 	}
