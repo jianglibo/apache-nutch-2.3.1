@@ -33,7 +33,7 @@ public class NbgovCatalogFetcher {
 	}
 
 	public NbgovCatalogFetcher(String catalogName, FetchResultSaver saver) {
-		this.catalog = config.getCatagories().get(catalogName).init();
+		this.catalog = config.getCatalogsAfterApplyTpl().get(catalogName).init();
 		this.saver = saver;
 	}
 
@@ -49,7 +49,7 @@ public class NbgovCatalogFetcher {
 				break;
 			}
 			int poolRemains = poolSize - ffcb.getRunningNumber();
-			int roundStart = currentPage;
+//			int roundStart = currentPage;
 			if (poolRemains > 0) {
 				for (int i = 0; i < poolRemains * 2; i++) {
 					if (currentPage < catalog.getPageLimit()) {
@@ -63,7 +63,7 @@ public class NbgovCatalogFetcher {
 					}
 				}
 			}
-			LOGGER.info("submit task from {} to {}", roundStart, currentPage);
+//			LOGGER.info("submit task from {} to {}", roundStart, currentPage);
 			Thread.sleep(100);
 		}
 		service.shutdown();

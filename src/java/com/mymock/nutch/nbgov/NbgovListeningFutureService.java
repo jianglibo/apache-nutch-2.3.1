@@ -13,19 +13,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 public class NbgovListeningFutureService {
 	
 	public static  ListeningExecutorService getInstance() {
-		return NbgovListeningFutureServiceHolder.INSTANCE.get();
-	}
-
-	private enum NbgovListeningFutureServiceHolder {
-		INSTANCE;
-		private ListeningExecutorService singleton;
-		
-		private NbgovListeningFutureServiceHolder() {
-			singleton = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NbgovConfig.getInstance().getFetchThreads()));
-		}
-		
-		public ListeningExecutorService get() {
-			return singleton;
-		}
+		return MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(NbgovConfig.getInstance().getFetchThreads()));
 	}
 }

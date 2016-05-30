@@ -1,7 +1,22 @@
 package provide CommonUtil 1.0
 
+package require Expect
+
 namespace eval CommonUtil {
 
+}
+
+proc ::CommonUtil::spawnCommand {args} {
+  set timeout 10000
+  spawn {*}$args
+  expect {
+    eof {
+      puts done
+    }
+    timeout {
+      puts timeout
+    }
+  }
 }
 
 proc ::CommonUtil::whereami {{content {}}} {

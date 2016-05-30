@@ -1,3 +1,15 @@
+crawlID: nbgov
+numberOfRounds: 10
+preRunClasses:
+  - com.mymock.nutch.nbgov.NbGovEntryPoint
+fetchThreads: 10
+batchNumber: 100
+seedFolder: urls/nbgov
+seedUrls:
+  - http://www.nb.gov.cn/
+  - http://gtoc.ningbo.gov.cn/
+  - http://gtob.ningbo.gov.cn/
+  - http://gtog.ningbo.gov.cn/
 headers:
   Host: gtoc.ningbo.gov.cn
   User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0
@@ -6,20 +18,109 @@ headers:
   Accept-Encoding: gzip, deflate
   Content-type: application/x-www-form-urlencoded; charset=UTF-8
   X-Requested-With: XMLHttpRequest
-urls:
-  jrgz:
-    url: http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp
-    queryStrings:
-      startrecord: 1
-      endrecord: 35
-      perpage: 15
+cattpl:
+  pageLimit: 0
+  baseUrl: http://gtoc.ningbo.gov.cn/module/web/jpage/dataproxy.jsp
+  queryStrings:
+    startrecord: 1
+    endrecord: 0
+    perpage: 15
+  formDatas:
+    col: 1
+    appid: 1
+    webid: 3
+    path: /
+    columnid: 158
+    sourceContentType: 1
+    unitid: 4116
+    webname: 中国·宁波+公民站
+    permissiontype: 0
+catalogs:
+  rd_jrgz:
     formDatas:
-      ol: 1
-      appid: 1
-      webid: 3
-      path: /
-      columnid: 167
-      sourceContentType: 1
+      columnid: 158
+      unitid: 4116
+  rd_bmts_gg:
+    formDatas:
+      columnid: 160
       unitid: 4278
-      webname: 中国·宁波+公民站
-      permissiontype: 0
+  rd_bmts_cx:
+    formDatas:
+      columnid: 161
+      unitid: 4278
+  rd_bmts_wy:
+    formDatas:
+      columnid: 162
+      unitid: 4278
+  rd_bmts_jy:
+    formDatas:
+      columnid: 163
+      unitid: 4278
+  rd_bmts_ks:
+    formDatas:
+      columnid: 164
+      unitid: 4278
+  rd_jczt_wmcs:
+    formDatas:
+      columnid: 167
+      unitid: 4278
+  rd_jczt_stnb:
+    formDatas:
+      columnid: 168
+      unitid: 4278
+  rd_jczt_ggaq:
+    formDatas:
+      columnid: 169
+      unitid: 4278
+  rd_jczt_jyhm:
+    formDatas:
+      columnid: 170
+      unitid: 4278
+  rd_jczt_ldjy:
+    formDatas:
+      columnid: 171
+      unitid: 4278
+  rd_jczt_shbz:
+    formDatas:
+      columnid: 172
+      unitid: 4278
+  rd_jczt_ylws:
+    formDatas:
+      columnid: 173
+      unitid: 4278
+  rd_jczt_zfzf:
+    formDatas:
+      columnid: 174
+      unitid: 4278
+  rd_jczt_gdjt:
+    formDatas:
+      columnid: 175
+      unitid: 4278
+  rd_wqzt_jbh:
+    formDatas:
+      columnid: 177
+      unitid: 4278
+  rd_wqzt_zbh:
+    formDatas:
+      columnid: 178
+      unitid: 4278
+  rd_wqzt_gjfzj:
+    formDatas:
+      columnid: 179
+      unitid: 4278
+  rd_wqzt_kyj:
+    formDatas:
+      columnid: 180
+      unitid: 4278
+  rd_wqzt_hhgq:
+    formDatas:
+      columnid: 181
+      unitid: 4278
+  rd_wqzt_yccy:
+    formDatas:
+      columnid: 182
+      unitid: 4278
+  rd_wqzt_gztf:
+    formDatas:
+      columnid: 183
+      unitid: 4278

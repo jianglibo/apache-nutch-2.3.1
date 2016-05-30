@@ -19,7 +19,7 @@ public class NbgovListTest extends BaseFort {
 	public void headers() {
 		NbgovConfig nbCfg = NbgovConfig.getInstance();
 		assertThat(nbCfg.getHeaders().get("Content-type"), equalTo("application/x-www-form-urlencoded; charset=UTF-8"));
-		assertThat(nbCfg.getCatagories().get("jrgz").getFormDatas().get("webname"), equalTo("中国·宁波+公民站"));
+		assertThat(nbCfg.getCatalogsAfterApplyTpl().get("rd_jrgz").getFormDatas().get("webname"), equalTo("中国·宁波+公民站"));
 	}
 	
 	@Test

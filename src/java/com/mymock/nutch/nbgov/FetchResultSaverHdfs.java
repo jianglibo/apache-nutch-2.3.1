@@ -3,49 +3,42 @@ package com.mymock.nutch.nbgov;
 import java.io.IOException;
 
 import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mymock.nutch.exception.NowayToContinueException;
 import com.mymock.nutch.hdfs.FileSystemInstance;
+import com.mymock.nutch.hdfs.HdfsUtil;
 
 /**
  * @author jianglibo@gmail.com
  * 
- * May 28, 2016
+ *         May 28, 2016
  */
 public class FetchResultSaverHdfs implements FetchResultSaver {
-	
+
 	private static Logger LOGGER = LoggerFactory.getLogger(FetchResultSaverHdfs.class);
-	
+
 	private FSDataOutputStream fdsos;
-	
+
 	/**
 	 * 
 	 */
 	public FetchResultSaverHdfs(NbgovConfig config, String filename) {
-		FileSystem fs = FileSystemInstance.get();
-		
-		Path seedFolder = new Path(config.getSeedFolder());
-		if (!seedFolder.isAbsolute()) {
-			seedFolder = new Path(fs.getHomeDirectory(), seedFolder);
-		}
-		
-		Path seedFile = new Path(seedFolder, filename);
 		try {
-			if (!fs.exists(seedFolder)) {
-				fs.mkdirs(seedFolder);
-			}
-			fdsos = fs.create(seedFile);
+			Path seedFile = HdfsUtil.mkdirsAndReturnFilePath(config.getSeedFolder(), filename);
+			fdsos = FileSystemInstance.get().create(seedFile);
 		} catch (IOException e) {
-			LOGGER.error(e.getMessage());
-			throw new IllegalArgumentException("hdfs connection failed.");
+			throw new NowayToContinueException("hdfs communication error.", e);
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.mymock.nutch.nbgov.FetchResultSaver#save(com.mymock.nutch.nbgov.FetchResult)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mymock.nutch.nbgov.FetchResultSaver#save(com.mymock.nutch.nbgov.
+	 * FetchResult)
 	 */
 	@Override
 	public void save(FetchResult fr) {
@@ -60,7 +53,9 @@ public class FetchResultSaverHdfs implements FetchResultSaver {
 		});
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mymock.nutch.nbgov.FetchResultSaver#done()
 	 */
 	@Override
@@ -71,6 +66,6 @@ public class FetchResultSaverHdfs implements FetchResultSaver {
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage());
 		}
-		
+
 	}
 }

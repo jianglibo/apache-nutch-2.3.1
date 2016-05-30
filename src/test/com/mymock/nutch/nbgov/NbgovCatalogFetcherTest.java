@@ -47,7 +47,7 @@ public class NbgovCatalogFetcherTest extends BaseForMocoRunner {
 	private void reqTimes(int pageLimit, int serverLimit, long expected, boolean eq) throws InterruptedException {
 		FetchResultSaverDummy frs = new FetchResultSaverDummy();
 		
-		NbgovCatalogConfig ncc = NbgovConfig.getInstance().getCatagories().get("jrgz");
+		NbgovCatalogConfig ncc = NbgovConfig.getInstance().getCatalogsAfterApplyTpl().get("rd_jrgz");
 		ncc.setPerpage(15);
 		ncc.setPageLimit(pageLimit);
 		ncc.setBaseUrl("http://localhost:12306");
