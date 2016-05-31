@@ -10,6 +10,9 @@ proc ::CommonUtil::spawnCommand {args} {
   set timeout 10000
   spawn {*}$args
   expect {
+    * {
+      expect_continue
+    }
     eof {
       puts done
     }
