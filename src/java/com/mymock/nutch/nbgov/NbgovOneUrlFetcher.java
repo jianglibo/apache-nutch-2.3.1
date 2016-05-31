@@ -69,9 +69,9 @@ public class NbgovOneUrlFetcher implements Callable<FetchResult> {
 		List<NameValuePair> nvps = (new ArrayList<>(catalog.getFormDatas().entrySet())).stream()
 				.map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue())).collect(Collectors.toList());
 		r.bodyForm(nvps);
-		LOGGER.info("start fetching from {}", targetUrl);
+//		LOGGER.info("start fetching from {}", targetUrl);
 		String content = executor.execute(r).returnContent().asString();
-		LOGGER.info("fetching {} done.", targetUrl);
+//		LOGGER.info("fetching {} done.", targetUrl);
 		return content;
 	}
 

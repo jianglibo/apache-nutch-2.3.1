@@ -45,6 +45,7 @@ public class NbGovEntryPoint {
 		
 		long start = System.currentTimeMillis();
 		for (Map.Entry<String, NbgovCatalogConfig> entry : catMap.entrySet()) {
+			long cstart = System.currentTimeMillis();
 			LOGGER.info("start process " + entry.getKey());
 			FetchResultSaverHdfs frs = new FetchResultSaverHdfs(nc, entry.getKey());
 			NbgovCatalogFetcher ncf = new NbgovCatalogFetcher(entry.getValue(), frs);
@@ -54,6 +55,7 @@ public class NbGovEntryPoint {
 			} catch (InterruptedException e) {
 				LOGGER.error(e.getMessage());
 			}
+			LOGGER.info("{} done. cost {} minuts.", entry.getKey(), (System.currentTimeMillis() - cstart) / 60000);
 		}
 		LOGGER.info("total done. cost {} minuts.", (System.currentTimeMillis() - start) / 60000);
 	}
