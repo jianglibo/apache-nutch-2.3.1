@@ -1,0 +1,9 @@
+{
+  "type": "record",
+  "name": "DoubleZi", "default":null,
+  "namespace": "com.mymock.nutch.generated",
+  "fields" : [
+    {"name": "zipair", "type": ["null","string"], "default":null},
+    {"name": "metric", "type" : "long","default":0}
+  ]
+}
