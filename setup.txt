@@ -5,3 +5,10 @@ HADOOP_HOME -> c:\hadoop-2.7.1
 or
 eclipse vmargs -Dhadoop.home.dir=C:\hadoop-2.7.1
 parameter: c:\urls
+
+http://wiki.apache.org/nutch/Nutch2Crawling
+
+
+Could not load definitions from resource org/sonar/ant/antlib.xml, just comment out the lines in build.xml
+
+lib jar, not exists.

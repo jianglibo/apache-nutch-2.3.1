@@ -887,11 +887,12 @@
  <!-- ================================================================== -->
 
  <!-- Define the Sonar task if this hasn't been done in a common script -->
+<!--
  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
   <classpath path="${ant.library.dir}" />
   <classpath path="${mysql.library.dir}" />
  </taskdef>
-
+-->
  <!-- Add the target -->
  <target name="sonar" description="--> run SONAR analysis">
 
@@ -926,9 +927,11 @@
   
   <!-- target: ant-eclipse-download   =================================== -->
   <target name="ant-eclipse-download" description="--> Downloads the ant-eclipse binary.">
-    <get src="http://downloads.sourceforge.net/project/ant-eclipse/ant-eclipse/1.0/ant-eclipse-1.0.bin.tar.bz2"
+  <!-- download mannully
+    <get src="https://nchc.dl.sourceforge.net/project/ant-eclipse/ant-eclipse/1.0/ant-eclipse-1.0.bin.tar.bz2"
          dest="${build.dir}/ant-eclipse-1.0.bin.tar.bz2" usetimestamp="false" />
-
+  -->
+    <copy file="e:/chromedownload/ant-eclipse-1.0.bin.tar.bz2" todir="${build.dir}"/>
     <untar src="${build.dir}/ant-eclipse-1.0.bin.tar.bz2"
            dest="${build.dir}" compression="bzip2">
       <patternset>

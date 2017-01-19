@@ -4,3 +4,47 @@
 * build runtime: ant runtime
 * prepare seed: ./script/nutch-runner.tcl prepareSeed
 * run crawl: ./script/nutch-runner.tcl [--skipClass=true] [--classOnly=true] fetch
+
+https://help.github.com/articles/configuring-a-remote-for-a-fork/
+
+https://help.github.com/articles/syncing-a-fork/
+
+
+find java in use. java -verbose
+
+D:\Documents\GitHub\apache-nutch-2.3.1\build.xml:931: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCe
+rtPathBuilderException: unable to find valid certification path to requested target
+
+When your Java program attempts to connect to a server that has an invalid or self signed certificate, such as an application server in a development environment, you may get the following exception:
+
+javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+
+To make your Java runtime environment trust the certificate, you need to import it into the JRE certificate store.
+
+Step 1 - Get the certificate into your browser store
+
+Browse to your application server using SSL. Your browser will tell you that the certificate isn't trusted and allow you to trust it, thereby placing it in the browser certificate store.
+
+Step 2 - Export the certificate to a binary file
+
+Your browser will have some kind of certificate manager that allows you to export or back up specific certificates to binary files. In Firefox that would be under Preferences / Advanced / Encryption / Servers. Find the certificate presented by the server and export it as a binary DER file.
+
+Step 3 - Import the certificate into the Java Store
+
+Make sure you have write access to your JRE and  use the keytool utility to import it:
+
+keytool -import -alias alias -keystore path-to-jre/lib/security/cacerts -file path-to-certificate-file
+
+Example:
+
+keytool -import -alias sunas -keystore /opt/jdk1.6/jre/lib/security/cacerts -file /home/gugrim/tmp/sunas.der
+
+You will be prompted for the keystore password, which is by default changeit.
+
+Also, when you connect to the server make sure you use the same name as the one set as the Subject in the certificate. You may need to add it to your host file if the server isn't reachable using this name, which may be the case for a developer server.
+
+That's it!
+
+D:\Java\jdk1.8.0_45\bin\keytool.exe -importcert -keystore "C:\Program Files (x86)\Java\jre1.8.0_111\lib\security\cacerts" -file "C:\Users\admin\Desktop\nchc.cer"
+
+password: changeit
