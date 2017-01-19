@@ -74,3 +74,4 @@ conf/
 **/whereami.txt
 nohup.out
 .settings
+**/*.tgz
