@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<!-- Put site-specific property overrides in this file. -->
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://s62.host.name:8020</value>
+    <description>
+    </description>
+  </property>
+  <property>
+    <name>io.file.buffer.size</name>
+    <value>4096</value>
+    <description>The size of buffer for use in sequence files.
+  The size of this buffer should probably be a multiple of hardware
+  page size (4096 on Intel x86), and it determines how much data is
+  buffered during read and write operations.</description>
+  </property>
+  <!--
+<property>
+  <name>ha.zookeeper.quorum</name>
+  <value>192.168.33.110,192.168.33.111,192.168.33.112</value>
+  <description>
+    A list of ZooKeeper server addresses, separated by commas, that are
+    to be used by the ZKFailoverController in automatic failover.
+  </description>
+</property>
+-->
+<!--
+  <property>
+    <name>ha.zookeeper.session-timeout.ms</name>
+    <value>5000</value>
+    <description>
+    The session timeout to use when the ZKFC connects to ZooKeeper.
+    Setting this value to a lower value implies that server crashes
+    will be detected more quickly, but risks triggering failover too
+    aggressively in the case of a transient error or network blip.
+  </description>
+  </property>
+ -->
+  <property>
+    <name>hadoop.proxyuser.hive.hosts</name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.hive.groups</name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.oozie.hosts</name>
+    <value>*</value>
+  </property>
+  <property>
+    <name>hadoop.proxyuser.oozie.groups</name>
+    <value>*</value>
+  </property>
+  <!--
+  <property>
+    <name>ha.zookeeper.quorum</name>
+    <value>s62.host.name,s63.host.name,s64.host.name</value>
+    <description>
+    </description>
+  </property>
+ -->
+</configuration>

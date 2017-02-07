@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+  <property>
+    <name>storage.data.store.class</name>
+    <value>org.apache.gora.hbase.store.HBaseStore</value>
+  </property>
+
+  <property>
+  <name>http.agent.name</name>
+  <value>fhgov</value>
+  <description>HTTP 'User-Agent' request header. MUST NOT be empty -
+  please set this to a single word uniquely related to your organization.
+
+  NOTE: You should also check other related properties:
+
+	http.robots.agents
+	http.agent.description
+	http.agent.url
+	http.agent.email
+	http.agent.version
+
+  and set their values appropriately.
+
+  </description>
+</property>
+<property>
+  <name>plugin.includes</name>
+ <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor)|urlnormalizer-(pass|regex|basic)|scoring-opic</value>
+ <description>Regular expression naming plugin directory names to
+  include.  Any plugin not matching this expression is excluded.
+  In any case you need at least include the nutch-extensionpoints plugin. By
+  default Nutch includes crawling just HTML and plain text via HTTP,
+  and basic indexing and search plugins. In order to use HTTPS please enable
+  protocol-httpclient, but be aware of possible intermittent problems with the
+  underlying commons-httpclient library.
+  </description>
+</property>
+
+<!-- fetcher properties -->
+
+<property>
+  <name>fetcher.server.delay</name>
+  <value>2.0</value>
+  <description>The number of seconds the fetcher will delay between
+   successive requests to the same server. Note that this might get
+   overriden by a Crawl-Delay from a robots.txt and is used ONLY if
+   fetcher.threads.per.queue is set to 1.
+   </description>
+</property>
+
+<property>
+  <name>fetcher.server.min.delay</name>
+  <value>0.0</value>
+  <description>The minimum number of seconds the fetcher will delay between
+  successive requests to the same server. This value is applicable ONLY
+  if fetcher.threads.per.queue is greater than 1 (i.e. the host blocking
+  is turned off).</description>
+</property>
+
+<property>
+ <name>fetcher.max.crawl.delay</name>
+ <value>30</value>
+ <description>
+ If the Crawl-Delay in robots.txt is set to greater than this value (in
+ seconds) then the fetcher will skip this page, generating an error report.
+ If set to -1 the fetcher will never skip such pages and will wait the
+ amount of time retrieved from robots.txt Crawl-Delay, however long that
+ might be.
+ </description>
+</property>
+
+<property>
+  <name>fetcher.threads.fetch</name>
+  <value>10</value>
+  <description>The number of FetcherThreads the fetcher should use.
+  This is also determines the maximum number of requests that are
+  made at once (each FetcherThread handles one connection). The total
+  number of threads running in distributed mode will be the number of
+  fetcher threads * number of nodes as fetcher has one map task per node.
+  </description>
+</property>
+
+<property>
+  <name>fetcher.threads.per.queue</name>
+  <value>5</value>
+  <description>This number is the maximum number of threads that
+    should be allowed to access a queue at one time. Setting it to
+    a value > 1 will cause the Crawl-Delay value from robots.txt to
+    be ignored and the value of fetcher.server.min.delay to be used
+    as a delay between successive requests to the same server instead
+    of fetcher.server.delay.
+   </description>
+</property>
+
+<property>
+  <name>fetcher.queue.mode</name>
+  <value>byHost</value>
+  <description>Determines how the URLs are placed into queues.
+   Allowed values are 'byHost', 'byDomain' and 'byIP'.
+   The value would usually correspond to that of 'partition.url.mode'.
+  </description>
+</property>
+
+</configuration>

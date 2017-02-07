@@ -27,6 +27,7 @@ if (!$hbaseHome) {
     return
 }
 
+$hbaseHome = $hbaseHome | Select-Object -ExpandProperty Value
 
 $hadoopFiles = ,"core-site.xml"
 $hadoopFiles | ForEach-Object {Join-Path $hadoopHome -ChildPath "etc\hadoop\$_"} | Copy-Item -Destination $targetFolder

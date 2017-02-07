@@ -75,3 +75,4 @@ conf/
 nohup.out
 .settings
 **/*.tgz
+**/hadoop.log.*

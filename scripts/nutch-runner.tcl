@@ -2,6 +2,8 @@
 # install-java.tcl \
 exec tclsh "$0" ${1+"$@"}
 
+# this script is a special case, It construct all urls by hand. 
+
 # if you do not inject new urls, crawl will only fetch reach interval items.
 set ::baseDir [file join [file dirname [info script]] ..]
 lappend auto_path [file join $::baseDir scripts]
