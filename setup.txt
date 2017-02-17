@@ -1,6 +1,7 @@
 ant runtime
 ant resolve-test -v > tt.txt
-
+org.hamcrest-all
+org.mockito-all
 HADOOP_HOME -> c:\hadoop-2.7.1
 or
 eclipse vmargs -Dhadoop.home.dir=C:\hadoop-2.7.1
@@ -10,6 +11,7 @@ https://wiki.apache.org/nutch/Crawl
 
 hadoop jar apache-nutch-${version}.job org.apache.nutch.crawl.Crawl urls -dir crawl -depth 3 -topN 5 (no way.)
 
+https://wiki.apache.org/nutch/solved_problems
 
 https://wiki.apache.org/nutch/NutchHadoopTutorial
 

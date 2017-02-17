@@ -1,0 +1,4 @@
+https://help.github.com/articles/syncing-a-fork/
+
+
+git remote add upstream https://github.com/apache/nutch.git

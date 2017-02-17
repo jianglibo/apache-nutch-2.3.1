@@ -16,6 +16,7 @@
  */
 package org.apache.nutch.plugin;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.nutch.crawl.InsightCodeUtil;
 import org.apache.nutch.util.NutchConfiguration;
 
 /**
@@ -63,6 +65,7 @@ public class PluginRepository {
    * @see java.lang.Object#Object()
    */
   public PluginRepository(Configuration conf) throws RuntimeException {
+//	  InsightCodeUtil.printTofile(conf, "PluginRepository get called.", "yes");
     fActivatedPlugins = new HashMap<String, Plugin>();
     fExtensionPoints = new HashMap<String, ExtensionPoint>();
     this.conf = new Configuration(conf);
@@ -80,6 +83,9 @@ public class PluginRepository {
     Pattern includes = Pattern.compile(conf.get("plugin.includes", ""));
     Map<String, PluginDescriptor> filteredPlugins = filter(excludes, includes,
         allPlugins);
+    
+    
+    
     fRegisteredPlugins = getDependencyCheckedPlugins(filteredPlugins,
         this.auto ? allPlugins : filteredPlugins);
     installExtensionPoints(fRegisteredPlugins);
@@ -89,6 +95,8 @@ public class PluginRepository {
       LOG.error(e.toString());
       throw new RuntimeException(e.getMessage());
     }
+    
+//    InsightCodeUtil.printTofile(conf, "plugins", "allplugins:" + allPlugins.size() + ";filtered:" + filteredPlugins.size() + conf.get("plugin.excludes", "") + conf.get("plugin.includes", "") + ";" + fActivatedPlugins.size());
     displayStatus();
   }
 
@@ -99,11 +107,15 @@ public class PluginRepository {
     String uuid = NutchConfiguration.getUUID(conf);
     if (uuid == null) {
       uuid = "nonNutchConf@" + conf.hashCode(); // fallback
+//      InsightCodeUtil.printTofile(conf, "nouuid", "yes");
     }
     PluginRepository result = CACHE.get(uuid);
     if (result == null) {
+//      InsightCodeUtil.printTofile(conf, "notincache", "yes");
       result = new PluginRepository(conf);
       CACHE.put(uuid, result);
+    } else {
+//    	InsightCodeUtil.printTofile(conf, "incache", "yes");
     }
     return result;
   }
@@ -442,4 +454,18 @@ public class PluginRepository {
     System.arraycopy(args, 2, subargs, 0, subargs.length);
     m.invoke(null, new Object[] { subargs });
   }
+
+public List<PluginDescriptor> getfRegisteredPlugins() {
+	return fRegisteredPlugins;
+}
+
+public HashMap<String, ExtensionPoint> getfExtensionPoints() {
+	return fExtensionPoints;
+}
+
+public HashMap<String, Plugin> getfActivatedPlugins() {
+	return fActivatedPlugins;
+}
+  
+  
 }

@@ -17,6 +17,7 @@
 package org.apache.nutch.fetcher;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.HashSet;
@@ -33,6 +34,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.nutch.crawl.GeneratorJob;
+//import org.apache.nutch.crawl.InsightCodeUtil;
 import org.apache.nutch.crawl.URLPartitioner.FetchEntryPartitioner;
 import org.apache.nutch.metadata.Nutch;
 import org.apache.nutch.parse.ParserJob;
@@ -131,7 +133,6 @@ public class FetcherJob extends NutchTool implements Tool {
   public static final Logger LOG = LoggerFactory.getLogger(FetcherJob.class);
 
   public FetcherJob() {
-
   }
 
   public FetcherJob(Configuration conf) {

@@ -22,6 +22,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.slf4j.Logger;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.nutch.crawl.InsightCodeUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -74,6 +77,7 @@ public class PluginManifestParser {
   public Map<String, PluginDescriptor> parsePluginFolder(String[] pluginFolders) {
     Map<String, PluginDescriptor> map = new HashMap<String, PluginDescriptor>();
 
+//      InsightCodeUtil.printTofile(conf, "pluginFolders", String.join(";",pluginFolders));
     if (pluginFolders == null) {
       throw new IllegalArgumentException("plugin.folders is not defined");
     }
@@ -109,18 +113,39 @@ public class PluginManifestParser {
   public File getPluginFolder(String name) {
     File directory = new File(name);
     if (!directory.isAbsolute()) {
-      URL url = PluginManifestParser.class.getClassLoader().getResource(name);
+//		InsightCodeUtil.printTofile(conf, "workingFolder", Paths.get(".").normalize().toAbsolutePath().toString());
+//		InsightCodeUtil.printCurrentFolderFiles(conf);
+//    	InsightCodeUtil.printClassPath(conf, "PluginManifestParser",PluginManifestParser.class.getClassLoader());
+//    	if (PluginManifestParser.class.getClassLoader().getParent() != null) {
+//    			InsightCodeUtil.printClassPath(conf, "PluginManifestParserParent",PluginManifestParser.class.getClassLoader().getParent());	
+//    	}
+    	
+      URL url = null; // PluginManifestParser.class.getClassLoader().getResource(name);
+      try {
+		Enumeration<URL> urls = PluginManifestParser.class.getClassLoader().getResources(name);
+		while (urls.hasMoreElements()) {
+			url = urls.nextElement();
+			if ("file".equals(url.getProtocol())) {
+				break;
+			}
+		}
+	} catch (IOException e1) {
+		e1.printStackTrace();
+	}
       if (url == null && directory.exists() && directory.isDirectory()
           && directory.listFiles().length > 0) {
         return directory; // relative path that is not in the classpath
       } else if (url == null) {
+//    	  InsightCodeUtil.printTofile(conf, "pluginUrlnotfound", "yes");
         LOG.warn("Plugins: directory not found: " + name);
         return null;
       } else if (!"file".equals(url.getProtocol())) {
+//    	  InsightCodeUtil.printTofile(conf, "protocol", url.getProtocol());
         LOG.warn("Plugins: not a file: url. Can't load plugins from: " + url);
         return null;
       }
       String path = url.getPath();
+//      InsightCodeUtil.printTofile(conf, "urlpath", path);
       if (WINDOWS && path.startsWith("/")) // patch a windows bug
         path = path.substring(1);
       try {

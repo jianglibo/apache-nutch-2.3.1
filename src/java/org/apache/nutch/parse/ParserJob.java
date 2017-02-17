@@ -63,7 +63,7 @@ public class ParserJob extends NutchTool implements Tool {
 
   private static final Collection<WebPage.Field> FIELDS = new HashSet<WebPage.Field>();
 
-  private Configuration conf;
+//  private Configuration conf;
 
   static {
     FIELDS.add(WebPage.Field.STATUS);
@@ -215,15 +215,10 @@ public class ParserJob extends NutchTool implements Tool {
     return fields;
   }
 
-  @Override
-  public Configuration getConf() {
-    return conf;
-  }
-
-  @Override
-  public void setConf(Configuration conf) {
-    this.conf = conf;
-  }
+//  @Override
+//  public Configuration getConf() {
+//    return conf;
+//  }
 
   @Override
   public Map<String, Object> run(Map<String, Object> args) throws Exception {

@@ -43,6 +43,15 @@
 
   </description>
 </property>
+<!-- 
+<property>
+  <name>plugin.folders</name>
+  <value>apache-nutch-2.3.1.job/classes/plugins</value>
+  <description>Directories where nutch plugins are located.  Each
+  element may be a relative or absolute path.  If absolute, it is used
+  as is.  If relative, it is searched for on the classpath.</description>
+</property>
+ -->
 <property>
   <name>plugin.includes</name>
  <value>protocol-http|urlfilter-regex|parse-(html|tika)|index-(basic|anchor)|urlnormalizer-(pass|regex|basic)|scoring-opic</value>

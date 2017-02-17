@@ -67,6 +67,15 @@ public class NutchConfiguration {
     return conf;
   }
 
+  public static Configuration create(Configuration conf) {
+	  if (conf != null) {
+		    setUUID(conf);
+		    addNutchResources(conf);
+	  }
+	    return conf;
+	  }
+
+  
   /**
    * Create a {@link Configuration} from supplied properties.
    * 

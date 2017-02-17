@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.nutch.metadata.Nutch;
@@ -75,6 +76,11 @@ public abstract class NutchTool extends Configured {
    */
   public boolean stopJob() throws Exception {
     return killJob();
+  }
+  
+  @Override
+  public void setConf(Configuration conf) {
+	  super.setConf(NutchConfiguration.create(conf));
   }
 
   /**

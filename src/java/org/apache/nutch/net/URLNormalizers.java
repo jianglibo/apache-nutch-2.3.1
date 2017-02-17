@@ -25,17 +25,19 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.hadoop.conf.Configuration;
+//import org.apache.nutch.crawl.InsightCodeUtil;
 import org.apache.nutch.plugin.Extension;
 import org.apache.nutch.plugin.ExtensionPoint;
 import org.apache.nutch.plugin.PluginRepository;
 import org.apache.nutch.plugin.PluginRuntimeException;
 import org.apache.nutch.util.ObjectCache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class uses a "chained filter" pattern to run defined normalizers.
@@ -136,8 +138,23 @@ public final class URLNormalizers {
     this.extensionPoint = PluginRepository.get(conf).getExtensionPoint(
         URLNormalizer.X_POINT_ID);
     ObjectCache objectCache = ObjectCache.get(conf);
-
+    
     if (this.extensionPoint == null) {
+//      String s = InsightCodeUtil.printClassPath(conf);
+      StringBuilder sb = new StringBuilder();
+      conf.iterator().forEachRemaining(entry -> {
+    	  sb.append(entry.getKey()).append(":").append(entry.getValue()).append("\n");
+      });
+      
+      StringBuilder sb1 = new StringBuilder();
+      for(Entry<String, ExtensionPoint> pd :PluginRepository.get(conf).getfExtensionPoints().entrySet()) {
+    	  sb1.append(pd.getKey()).append(";")
+    	  .append(pd.getValue().getName())
+    	  .append(";")
+    	  .append(pd.getValue().getClass())
+    	  .append("\n");
+      }
+//      InsightCodeUtil.printTofile(conf,"fExtensionPoints", sb1.toString());
       throw new RuntimeException("x point " + URLNormalizer.X_POINT_ID
           + " not found.");
     }

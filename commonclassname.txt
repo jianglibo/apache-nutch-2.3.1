@@ -1,0 +1,2 @@
+org.apache.hadoop.util.RunJar
+org.apache.hadoop.mapreduce.JobResourceUploader
